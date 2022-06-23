@@ -1,5 +1,6 @@
 <template>
   <div class="HomePage">
+
     <TypeNav />
     <list-continer />
     <recomend-page />
@@ -15,6 +16,13 @@ import ListContiner from './ListContiner.vue';
 import RankPage from './RankPage.vue';
 import RecomendPage from './RecomendPage.vue';
 export default {
+  name: "HomePage",
   components: { ListContiner, RecomendPage, RankPage, LikePage, FloorPage },
+  computed: {
+  },
+  methods: {
+
+  }
+
 };
 </script>
