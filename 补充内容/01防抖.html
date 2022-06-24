@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
+    />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <script src="utils/lodash.js"></script>
+    <title>Document</title>
+  </head>
+  <body>
+    <p>请输入内容<input /></p>
+  </body>
+  <script>
+    let demo = document.getElementsByTagName("p");
+    demo[0].oninput = _.debounce(function () {
+      console.log("我1秒后会执行");
+    }, 1000);
+  </script>
+</html>

@@ -2,40 +2,77 @@
   <div class="HomeTypeNav">
     <div class="type-nav">
       <div class="container">
-        <h2 class="all">全部商品分类</h2>
-        <nav class="nav">
-          <a href="###">服装城</a>
-          <a href="###">美妆馆</a>
-          <a href="###">尚品汇超市</a>
-          <a href="###">全球购</a>
-          <a href="###">闪购</a>
-          <a href="###">团购</a>
-          <a href="###">有趣</a>
-          <a href="###">秒杀</a>
-        </nav>
-        <div class="sort">
-          <div class="all-sort-list2">
-            <div class="item" v-for="(c1,index) in categoryList" :key="c1.categoryId">
-              <h3>
-                <a href="">{{ c1.categoryName}}</a>
-              </h3>
-              <div class="item-list clearfix">
-                <div class="subitem" v-for="(c2,index) in c1.categoryChild" :key="c2.categoryId">
-                  <dl class="fore">
-                    <dt>
-                      <a href="">{{ c2.categoryName }}</a>
-                    </dt>
-                    <dd>
-                      <em v-for="(c3,index) in c2.categoryChild" :key="c3.categoryId">
-                        <a href="">{{ c3.categoryName }}</a>
-                      </em>
+        <div class="" @mouseleave="leaveIndex">
+          <!-- 这个div是用于给三级联动菜单最外层包一个盒子，用于控制当鼠标离开这个div区域时，指针经过区域的背景色显示与消失-->
+          <h2 class="all">全部商品分类</h2>
 
-                    </dd>
-                  </dl>
+          <nav class="nav">
+            <a href="###">服装城</a>
+            <a href="###">美妆馆</a>
+            <a href="###">尚品汇超市</a>
+            <a href="###">全球购</a>
+            <a href="###">闪购</a>
+            <a href="###">团购</a>
+            <a href="###">有趣</a>
+            <a href="###">秒杀</a>
+          </nav>
+          <div class="sort">
+            <div class="all-sort-list2" @click="goSearch">
+              <div
+                class="item"
+                v-for="(c1, index) in categoryList"
+                :key="c1.categoryId"
+                :class="{ cur: currentIndex === index }"
+              >
+                <h3 @mouseenter="changeIndex(index)">
+                  <a
+                    :data-categoryName="c1.categoryName"
+                    :data-category1Id="c1.categoryId"
+                    >{{ c1.categoryName }}</a
+                  >
+                  <!--
+1。这里不建议用routerlink组件，因为每一个routerlink都是一个组件，
+当页面有几千个数据的时候就会渲染出来几千个组件，
+如果路由中使用了占位符，这里使用routerlink时，也必须的有相对应的参数，
+否则无法跳转成功的
+2。这里不要给a标签添加点击事件，
+这样的话循环出来几千个a标签，就会有几千个回调函数
+-->
+
+                  <!--<router-link to="/search">{{ c1.categoryName }}</router-link>-->
+                </h3>
+                <!--二级菜单，三级菜单-->
+                <div
+                  class="item-list clearfix"
+                  :style="{ display: currentIndex === index ? 'block' : 'none' }"
+                >
+                  <div
+                    class="subitem"
+                    v-for="c2 in c1.categoryChild"
+                    :key="c2.categoryId"
+                  >
+                    <dl class="fore">
+                      <dt>
+                        <a
+                          :data-categoryName="c2.categoryName"
+                          :data-category2Id="c2.categoryId"
+                          >{{ c2.categoryName }}</a
+                        >
+                      </dt>
+                      <dd>
+                        <em v-for="c3 in c2.categoryChild" :key="c3.categoryId">
+                          <a
+                            :data-categoryName="c3.categoryName"
+                            :data-category3Id="c3.categoryId"
+                            >{{ c3.categoryName }}</a
+                          >
+                        </em>
+                      </dd>
+                    </dl>
+                  </div>
                 </div>
               </div>
             </div>
-
           </div>
         </div>
       </div>
@@ -44,21 +81,55 @@
 </template>
 
 <script>
-import {mapState} from "vuex"
+import { mapState } from "vuex";
+import throttle from "lodash/throttle";
+//throttle是默认报漏的，不需要加大括号。
+// 如果一个文件中包含多个报漏出来的函数。必须的用大括号
 export default {
-  name: 'HomeTypeNav',
-//  当组件挂在完毕，开始获取菜单数据
+  name: "HomeTypeNav",
+  data() {
+    return {
+      currentIndex: -1,
+    };
+  },
+  //  当组件挂在完毕，开始获取菜单数据
   mounted() {
-  //  告诉vuex，获取数据，并存储在vuex中
-    this.$store.dispatch("getCategoryList")
-    console.log(this.$store)
+    //  告诉vuex，获取数据，并存储在vuex中
+    this.$store.dispatch("getCategoryList");
+    // console.log(this.$store);
+  },
+  methods: {
+    // changeIndex(index) {
+    //   //用户快速划过菜单，并不需要向用户展示菜单。 这里引入lodash，配置节流。
+    //   this.currentIndex = index;
+    //   console.log("鼠标进入了", index);
+    // },
+    changeIndex: throttle(function (index) {
+      this.currentIndex = index;
+    }, 100),
+    leaveIndex() {
+      // console.log("鼠标离开了");
+      this.currentIndex = -1;
+    },
+    //  实现三级联动菜单的跳转
+    goSearch(e) {
+      // this.$router.push("/search");
+      let el = e.target;
+      let { categoryname, category1id, category2id, category3id } = el.dataset;
+      console.log(categoryname, category1id, category2id, category3id);
+      console.log(el);
+
+      // for (const elKey in el) {
+      //   console.log(el[elKey]);
+      // }
+    },
   },
   computed: {
     ...mapState({
-      categoryList: (state) =>{
-        return state.home.categoryList
-      }
-    })
+      categoryList: (state) => {
+        return state.home.categoryList;
+      },
+    }),
   },
 };
 </script>
@@ -120,7 +191,7 @@ export default {
           }
 
           .item-list {
-            display: none;
+            //display: none;
             position: absolute;
             width: 734px;
             min-height: 460px;
@@ -172,12 +243,15 @@ export default {
               }
             }
           }
-
-          &:hover {
-            .item-list {
-              display: block;
-            }
-          }
+          //用于控制二级菜单的显示与隐藏
+          //&:hover {
+          //  .item-list {
+          //    display: block;
+          //  }
+          //}
+        }
+        .cur {
+          background-color: #4cb9fc;
         }
       }
     }

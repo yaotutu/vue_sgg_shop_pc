@@ -1695,7 +1695,7 @@
 
 <script>
 export default {
-  name: 'HomeTypeNav',
+  name: "HomeTypeNav",
 };
 </script>
 

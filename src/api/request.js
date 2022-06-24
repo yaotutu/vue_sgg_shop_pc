@@ -17,7 +17,7 @@ requests.interceptors.response.use(
     nprogress.done();
     return res.data;
   },
-  (error) => {
+  () => {
     return Promise.reject(new Error("失败了"));
   }
 );
