@@ -29,7 +29,7 @@ export default new VueRouter({
       path: "/search",
       component: SearchPage,
       meta: { show: false },
-      name: "searchName",
+      name: "searchPageName",
     },
     // 重定向到首页
     {

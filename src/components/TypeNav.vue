@@ -116,9 +116,24 @@ export default {
       // this.$router.push("/search");
       let el = e.target;
       let { categoryname, category1id, category2id, category3id } = el.dataset;
-      console.log(categoryname, category1id, category2id, category3id);
-      console.log(el);
 
+      if (categoryname) {
+        //如果categoryname 不为空，说明用户点击了a标签。
+        let location = { name: "searchPageName" };
+        //这里是通过路由的名字跳转的，需要与路由配置文件中的name属性一致
+        let query = { categoryname: categoryname };
+
+        if (category1id) {
+          query.category1id = category1id;
+        } else if (category2id) {
+          query.category2id = category2id;
+        } else if (category3id) {
+          query.category3id = category3id;
+        }
+        location.query = query;
+        // console.log(location);
+        this.$router.push(location);
+      }
       // for (const elKey in el) {
       //   console.log(el[elKey]);
       // }
