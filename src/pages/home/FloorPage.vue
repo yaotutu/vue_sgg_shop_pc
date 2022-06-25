@@ -3,7 +3,7 @@
   <div class="floor">
     <div class="py-container">
       <div class="title clearfix">
-        <h3 class="fl">家用电器</h3>
+        <h3 class="fl">{{ list.name }}</h3>
         <div class="fr">
           <ul class="nav-tabs clearfix">
             <li class="active">
@@ -35,14 +35,11 @@
           <div class="floor-1">
             <div class="blockgary">
               <ul class="jd-list">
-                <li>节能补贴</li>
-                <li>4K电视</li>
-                <li>空气净化器</li>
-                <li>IH电饭煲</li>
-                <li>滚筒洗衣机</li>
-                <li>电热水器</li>
+                <li v-for="(value, index) in list.keywords" :key="index">
+                  {{ value }}
+                </li>
               </ul>
-              <img src="../../components/images/home/floor-1-1.png" />
+              <img :src="list.bigImg" />
             </div>
             <div class="floorBanner">
               <div class="swiper-container" id="floor1Swiper">
@@ -95,7 +92,10 @@
 
 <script>
 export default {
-  name: 'FloorPage',
+  name: "FloorPage",
+  props: {
+    list: Object,
+  },
 };
 </script>
 
@@ -134,7 +134,7 @@ export default {
               background-color: #fff;
 
               &::after {
-                content: '|';
+                content: "|";
                 padding: 0 10px;
               }
             }
@@ -142,7 +142,7 @@ export default {
             &:nth-child(7) {
               a {
                 &::after {
-                  content: '';
+                  content: "";
                 }
               }
             }

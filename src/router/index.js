@@ -8,6 +8,15 @@ import LoginPage from "@/pages/LoginPage";
 import RegisterPage from "@/pages/RegisterPage";
 import SearchPage from "@/pages/SearchPage";
 
+//重写vue-router push函数，解决重复点击报错的问题
+//NavigationDuplicated: Avoided redundant navigation to current location: "/?
+// 获取原型对象上的push函数
+const originalPush = VueRouter.prototype.push;
+// 修改原型对象中的push方法
+VueRouter.prototype.push = function push(location) {
+  return originalPush.call(this, location).catch((err) => err);
+};
+
 export default new VueRouter({
   routes: [
     {
@@ -26,7 +35,7 @@ export default new VueRouter({
       meta: { show: false },
     },
     {
-      path: "/search",
+      path: "/search/:keyWord",
       component: SearchPage,
       meta: { show: false },
       name: "searchPageName",

@@ -100,8 +100,24 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
+
 export default {
-  name: 'ListContiner',
+  name: "ListContiner",
+  data() {
+    return {};
+  },
+  mounted() {
+    //  页面加载的时候，获取轮播图数据
+    //  派发给vuex，告诉他，我需要轮播图的数据了
+    this.$store.dispatch("getBannerList");
+    this.$store.dispatch("getFloorList");
+  },
+  computed: {
+    ...mapState({
+      bannerList: (state) => state.home.bannerList,
+    }),
+  },
 };
 </script>
 

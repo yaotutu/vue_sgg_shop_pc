@@ -4,6 +4,8 @@ import App from "./App.vue";
 import router from "@/router";
 import store from "@/store";
 
+import "@/mock/mockServe";
+
 // 引入组件
 import TypeNav from "@/components/TypeNav";
 Vue.component("TypeNav", TypeNav);

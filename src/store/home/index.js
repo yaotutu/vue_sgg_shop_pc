@@ -1,8 +1,12 @@
-import { reqCategoryList } from "@/api";
+import { reqCategoryList, reqGetBannerList, reqGetFloorList } from "@/api";
 
 //home的小仓库模块
 const state = {
+  //三级联动菜单
   categoryList: [],
+  //  轮播图的数据
+  bannerList: [],
+  floorList: [],
 };
 const mutations = {
   GETCATEGORYLIST(state, categoryList) {
@@ -12,8 +16,16 @@ const mutations = {
     // console.log(state);
     // console.log(categoryList);
   },
+  GETBANNERLIST(state, data) {
+    state.bannerList = data;
+  },
+  REQGETFLOORLIST(state, data) {
+    // console.log("REQGETFLOORLIST", "REQGETFLOREQGETFLOORLISTORLIST");
+    state.floorList = data;
+  },
 };
 const actions = {
+  //actios 用于逻辑的处理，拿到最后的数据，交给mutations，actions本身并不直接处理数据
   async getCategoryList({ commit }) {
     let res = await reqCategoryList();
     // console.log(res);
@@ -21,7 +33,22 @@ const actions = {
       commit("GETCATEGORYLIST", res.data);
     }
   },
+  async getBannerList({ commit }) {
+    let res = await reqGetBannerList();
+    if (res.code === 200) {
+      // console.log("res", res);
+      commit("GETBANNERLIST", res.data);
+    }
+  },
+  async getFloorList({ commit }) {
+    let res = await reqGetFloorList();
+    // console.log("res", res);
+    if (res.code === 200) {
+      commit("REQGETFLOORLIST", res.data);
+    }
+  },
 };
+//getters 相当于计算属性
 const getters = {};
 
 export default {

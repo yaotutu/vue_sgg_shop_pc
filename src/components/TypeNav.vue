@@ -2,7 +2,7 @@
   <div class="HomeTypeNav">
     <div class="type-nav">
       <div class="container">
-        <div class="" @mouseleave="leaveIndex">
+        <div class="" @mouseleave="leaveIndex" @mouseenter="enterMenuList">
           <!-- 这个div是用于给三级联动菜单最外层包一个盒子，用于控制当鼠标离开这个div区域时，指针经过区域的背景色显示与消失-->
           <h2 class="all">全部商品分类</h2>
 
@@ -16,7 +16,7 @@
             <a href="###">有趣</a>
             <a href="###">秒杀</a>
           </nav>
-          <div class="sort">
+          <div class="sort" v-show="sortDisplay">
             <div class="all-sort-list2" @click="goSearch">
               <div
                 class="item"
@@ -90,26 +90,36 @@ export default {
   data() {
     return {
       currentIndex: -1,
+      sortDisplay: true,
     };
   },
   //  当组件挂在完毕，开始获取菜单数据
   mounted() {
     //  告诉vuex，获取数据，并存储在vuex中
-    this.$store.dispatch("getCategoryList");
+    //将该方法放在app。vue中 因为该数据只需获取一次，并不需要频繁获取，这样当该页面被复用时，并不需要每次都去服务器请求数据，只需当app。vue执行时，请求一次即可。
+    // this.$store.dispatch("getCategoryList");
     // console.log(this.$store);
+    //  当页面组件挂在时，检测路由路径，如果在不再home页面，则将sort菜单隐藏起来
+    // console.log(this.$route.path);
+    if (this.$route.path !== "/home") {
+      this.sortDisplay = false;
+    }
   },
   methods: {
-    // changeIndex(index) {
-    //   //用户快速划过菜单，并不需要向用户展示菜单。 这里引入lodash，配置节流。
-    //   this.currentIndex = index;
-    //   console.log("鼠标进入了", index);
-    // },
     changeIndex: throttle(function (index) {
       this.currentIndex = index;
     }, 100),
+    //当鼠标移出菜单区域
     leaveIndex() {
       // console.log("鼠标离开了");
       this.currentIndex = -1;
+      if (this.$route.path === "/search") {
+        this.sortDisplay = false;
+      }
+    },
+    //当鼠标移进去菜单区域
+    enterMenuList() {
+      this.sortDisplay = true;
     },
     //  实现三级联动菜单的跳转
     goSearch(e) {
@@ -122,7 +132,6 @@ export default {
         let location = { name: "searchPageName" };
         //这里是通过路由的名字跳转的，需要与路由配置文件中的name属性一致
         let query = { categoryname: categoryname };
-
         if (category1id) {
           query.category1id = category1id;
         } else if (category2id) {
@@ -130,10 +139,19 @@ export default {
         } else if (category3id) {
           query.category3id = category3id;
         }
-        location.query = query;
-        // console.log(location);
-        this.$router.push(location);
+        //这里增加一个判断，如果搜索框中有params参数，也应该携带过来
+        if (this.$route.params) {
+          location.params = this.$route.params;
+          location.query = query;
+          console.log(location);
+          this.$router.push(location);
+        } else {
+          location.query = query;
+          console.log(location);
+          this.$router.push(location);
+        }
       }
+
       // for (const elKey in el) {
       //   console.log(el[elKey]);
       // }

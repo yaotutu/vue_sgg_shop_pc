@@ -60,18 +60,18 @@
 
 <script>
 export default {
-  name: 'HeaderComponent',
+  name: "HeaderComponent",
   data() {
     return {
-      keyWord: '',
+      keyWord: "",
     };
   },
   methods: {
     goSearch() {
       // 路由传参数
       // 方式一: 纯字符串拼接的形式
-      // 第一个为pararm传递:params参数：路由router.js需要占位，属于URL当中一部分
-      // 第二个为query传递:路由不需要占位，写法类似于ajax当中query参数
+      // 第一个为pararm传递:params参数：路由router.js需要占位,
+      // 第二个为query传递:路由不需要占位，写法类似于ajax当中query参数,,参数会显示在地址栏中query与path组合使用,刷新页面时参数不会消失
       // this.$router.push(
       //   '/search/' + this.keyWord + '?k=' + this.keyWord.toUpperCase()
       // );
@@ -80,14 +80,24 @@ export default {
       //   `/search/${this.keyWord}?k=${this.keyWord.toUpperCase()}`
       // );
       // 方式三: 对象形式
-      this.$router.push({
-        // 这里的name需要在路由规则中单独配置
-        name: 'searchName',
-        params: {
-          keyWord: this.keyWord,
-        },
-        query: this.keyWord.toUpperCase(),
-      });
+      if (this.$route.query) {
+        let location = {
+          name: "searchPageName",
+          params: {
+            keyWord: this.keyWord || undefined,
+          },
+        };
+        location.query = this.$route.query;
+        this.$router.push(location);
+      } else {
+        // this.$router.push({
+        //   // 这里的name需要在路由规则中单独配置
+        //   name: "searchPageName",
+        //   params: {
+        //     keyWord: this.keyWord || undefined,
+        //   },
+        // });
+      }
     },
   },
 };
