@@ -19,3 +19,8 @@ new Vue({
   router,
   store,
 }).$mount("#app");
+
+//测试功能区域
+// import { reqGetSearchInfo } from "@/api";
+//
+// console.log("reqGetSearchInfo()", reqGetSearchInfo({}));

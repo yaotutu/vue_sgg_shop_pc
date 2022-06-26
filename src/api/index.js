@@ -22,3 +22,12 @@ export const reqGetBannerList = () => {
 export const reqGetFloorList = () => {
   return mockRequests.get("/floors");
 };
+
+//获取search页面的搜索数据
+export const reqGetSearchInfo = (params) => {
+  return requests({
+    url: "/list",
+    method: "post",
+    data: params,
+  });
+};
