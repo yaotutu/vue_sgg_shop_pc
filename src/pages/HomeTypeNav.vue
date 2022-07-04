@@ -1,4 +1,5 @@
 <template>
+  <!--  -->
   <div class="HomeTypeNav">
     <div class="type-nav">
       <div class="container">
