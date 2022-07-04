@@ -26,23 +26,12 @@
           <div class="sui-navbar">
             <div class="navbar-inner filter">
               <ul class="sui-nav">
-                <li class="active">
-                  <a href="#">综合</a>
+                <li :class="{active: searchParams.order.indexOf('1') != -1}"> 
+                  <a href="#">综合 <span class="iconfont icon-up"></span> </a>
                 </li>
-                <li>
-                  <a href="#">销量</a>
-                </li>
-                <li>
-                  <a href="#">新品</a>
-                </li>
-                <li>
-                  <a href="#">评价</a>
-                </li>
-                <li>
-                  <a href="#">价格⬆</a>
-                </li>
-                <li>
-                  <a href="#">价格⬇</a>
+                <li :class="{active: searchParams.order.indexOf('2') != -1}">
+                  <a href="#">价格<span class="iconfont icon-up"></span> </a>
+
                 </li>
               </ul>
             </div>
@@ -134,12 +123,12 @@
     data() {
       return {
         searchParams: {
-          category1Id: "",
-          category2Id: "",
-          category3Id: "",
+          category1id: "",
+          category2id: "",
+          category3id: "",
           categoryName: "",
           keyword: "",
-          order: "",
+          order: "1:desc",
           pageNo: 1,
           pageSize: 10,
           props: [],
@@ -152,6 +141,7 @@
     },
     beforeMount() {
       Object.assign(this.searchParams, this.$route.params, this.$route.query);
+      console.log(this.$route);
       // console.log("this", this.searchParams);
     },
     mounted() {
@@ -172,6 +162,9 @@
         Object.assign(this.searchParams, this.$route.query, this.$route.params);
         // console.log("@@", this.searchParams);
         this.getData();
+        this.searchParams.category1Id = "";
+        this.searchParams.category2Id = "";
+        this.searchParams.category3Id = "";
       },
     },
   };
